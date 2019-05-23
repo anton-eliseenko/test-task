@@ -1,0 +1,47 @@
+<!--
+ * Задание №2
+ * Найдите ошибку
+ * var selectors = [ “.rows”, “table thead tr”, “div.comments” ];
+ * var i = 0;
+ * var count = 0;
+ * while ( i < selectors.length ) {
+ *     count += $( selectors[i] ).length;
+ * }
+ * console.log(count);
+ *
+-->
+
+
+<div class="rows">
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+</div>
+
+<table>
+    <thead>
+        <tr><td></td></tr>
+    </thead>
+    <tbody>
+        <tr><td></td></tr>
+    </tbody>
+</table>
+
+<div class="comments"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script>
+(function ($) {
+    var selectors = [ ".rows", "table thead tr", "div.comments" ];
+    var i = 0;
+    var count = 0;
+    // Бесконечный цикл, while никогда не закончится.
+    // Нужно использовать for:
+    for ( i; i < selectors.length; i++ ) {
+        count += $( selectors[i] ).length;
+    }
+    console.log(count);
+})(jQuery);
+</script>
+
+

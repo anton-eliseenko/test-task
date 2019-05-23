@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 3</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <style>
+        body {
+            margin-top: 20px;
+            margin-bottom: 80px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="search-form" action="task3.php" method="post" class="form-inline">
+            <div class="form-group">
+                <input type="text" name="username" placeholder="Please enter a name" class="form-control">
+                <input type="submit" value="Submit" class="btn btn-submit">
+                <span id="ajax-status"></span>
+            </div>
+        </form>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Debt</th>
+            </tr>
+            </thead>
+            <tbody id="table-result"></tbody>
+        </table>
+    </div>
+    <script>
+        document.querySelector('#search-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var statusElement = document.querySelector('#ajax-status');
+            var tableBodyElement = document.querySelector('#table-result');
+            var formElement = e.target;
+            var data = new FormData(formElement);
+            var request = new XMLHttpRequest();
+
+            request.open('POST', formElement.action, true);
+
+            // Clear table
+            request.addEventListener('loadstart', function () {
+                tableBodyElement.innerHTML = '';
+                statusElement.textContent = 'Request...'
+            });
+
+            // Load data
+            request.addEventListener('load', function () {
+                if (request.status === 200) {
+                    /**
+                     * @type {{
+                     *    id: Number,
+                     *    username: String,
+                     *    description: String,
+                     *    debt: Number
+                     * }}
+                     * */
+                    var user;
+                    /**
+                     * @type {Array}
+                     */
+                    var response = JSON.parse(request.responseText);
+                    var _trElement, _tdElement;
+                    for (var i = 0; i < response.length; i++) {
+                        user = response[i];
+                        _trElement = document.createElement('tr');
+                        for (var key in user) {
+                            _tdElement = document.createElement('td');
+                            _tdElement.textContent = user[key];
+                            _trElement.appendChild(_tdElement);
+                        }
+                        tableBodyElement.appendChild(_trElement);
+                    }
+                    statusElement.textContent = '';
+                } else {
+                    statusElement.textContent = 'Error!';
+                    tableBodyElement.innerHTML = '';
+                }
+            });
+
+            request.send(data);
+        });
+
+    </script>
+</body>
+</html>
